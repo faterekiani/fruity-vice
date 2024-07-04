@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .container {
+    @apply mx-auto px-4;
+  }
+  .product-item {
+    @apply px-2 py-4 border border-stone-200 hover:shadow-xl rounded-md transition-colors text-center;
+  }
+
+  .modal {
+    @apply bg-white shadow-lg rounded-md p-5 md:p-8;
+  }
+  .linkButton {
+    @apply text-blue-500 hover:text-blue-600 hover:underline;
+  }
+  .btn {
+    @apply px-4 py-2 w-32 md:w-40 rounded-md text-xs md:text-sm tracking-wide font-light uppercase transition-colors duration-300;
+  }
+  .primaryBtn {
+    @apply bg-red-600 text-white hover:bg-red-500 focus:outline-none focus:ring focus:ring-red-500 focus:ring-offset-2;
+  }
+  .secondaryBtn {
+    @apply bg-stone-100 shadow-sm border border-stone-200 text-stone-600 transition-colors  hover:bg-stone-300 hover:text-stone-800 focus:outline-none focus:ring focus:ring-stone-300 focus:ring-offset-2;
+  }
+  .active {
+    @apply bg-red-600 text-white;
+  }
+
+  .spinner {
+    width: 45px;
+    aspect-ratio: 0.75;
+    --c: no-repeat linear-gradient(theme(colors.stone.800) 0 0);
+    background: var(--c) 0% 50%, var(--c) 50% 50%, var(--c) 100% 50%;
+    background-size: 20% 50%;
+    animation: loading 1s infinite linear;
+  }
+  @keyframes loading {
+    20% {
+      background-position: 0% 0%, 50% 50%, 100% 50%;
+    }
+    40% {
+      background-position: 0% 100%, 50% 0%, 100% 50%;
+    }
+    60% {
+      background-position: 0% 50%, 50% 100%, 100% 0%;
+    }
+    80% {
+      background-position: 0% 50%, 50% 50%, 100% 100%;
+    }
+  }
+}
+@layer utilities {
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
