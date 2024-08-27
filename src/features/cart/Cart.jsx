@@ -22,9 +22,6 @@ function Cart() {
     0
   );
 
-  // import { useDeleteCart } from "./useDeleteItem";
-  // const { handleClearCart } = useDeleteCart();
-
   if (!cart.length)
     return <EmptyPage page="Cart" message="Start adding some Fruits" />;
 

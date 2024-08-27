@@ -1,19 +1,24 @@
-import { useLoaderData } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useFavorites } from "./useFavorites";
-import { getFruites } from "../../services/apiFruites";
 import { formatCurrency } from "../../utils/helper";
 
 import EmptyPage from "../../ui/EmptyPage";
 import DeleteButton from "../cart/DeleteButton";
+import { deleteFavoriteList } from "./favoriteSlice";
+import { useState } from "react";
+import Modal from "../../ui/Modal";
+import CleareFavoriteModal from "./ClearFavoriteModal";
 
 function FavoritesList() {
-  const { favorites, removeFromFavorites } = useFavorites();
+  const dispatch = useDispatch();
+  const { favoriteListItems } = useSelector((state) => state?.favoriteList);
 
-  // retrieves the data passed by the loader function
-  const menu = useLoaderData();
+  // modal
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
-  if (!favorites.length)
+  if (!favoriteListItems.length)
     return (
       <EmptyPage
         page="Favorite list"
@@ -22,36 +27,46 @@ function FavoritesList() {
     );
 
   return (
-    <div className="container mt-14">
-      <h2 className="divide-y divide-stone-200 border-b">Favorite products</h2>
+    <>
+      <div className="container mt-14">
+        <h2 className=" mt-3 divide-y divide-stone-200 border-b">
+          Favorite products
+        </h2>
 
-      {favorites.length > 0 &&
-        favorites.map((productId) => {
-          const product = menu.find((item) => item.id === productId);
-          return (
-            <div key={productId} className="flex justify-between mt-6 px-4">
-              <p>{product ? product.name : "product not found"}</p>
-              <div className="flex items-center gap-4 font-bold">
-                <p>{formatCurrency(productId)}</p>
-                <button
-                  onClick={() => {
-                    removeFromFavorites(productId);
-                  }}
-                >
-                  <DeleteButton />
-                </button>
+        {favoriteListItems.length > 0 &&
+          favoriteListItems.map((item) => {
+            return (
+              <div key={item.id} className="flex justify-between mt-6 px-4">
+                <p>{item ? item.name : "product not found"}</p>
+                <div className="flex items-center gap-4 font-bold">
+                  <p>{formatCurrency(item.id)}</p>
+                  <button
+                    onClick={() => {
+                      dispatch(deleteFavoriteList(item.id));
+                    }}
+                  >
+                    <DeleteButton id={favoriteListItems.id} />
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
-    </div>
+            );
+          })}
+      </div>
+      <div className="flex justify-end mt-10">
+        <button className="btn primaryBtn" onClick={handleOpen}>
+          Clear cart
+        </button>
+        {isOpen && (
+          <Modal isOpen={isOpen} onClose={handleClose}>
+            <CleareFavoriteModal
+              onClose={handleClose}
+              id={favoriteListItems.id}
+            />
+          </Modal>
+        )}
+      </div>
+    </>
   );
-}
-
-export async function loader() {
-  const fruitMenu = await getFruites();
-
-  return fruitMenu;
 }
 
 export default FavoritesList;

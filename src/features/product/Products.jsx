@@ -43,7 +43,7 @@ function Products() {
       <div className="container mt-10">
         <ProductsOperations products={menu} />
 
-        <ul className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 h-auto overflow-y-auto max-h-[450px] px-4">
+        <ul className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 px-4 mb-8">
           {sortedFruits.map((fruit) => (
             <Product fruit={fruit} key={fruit.id} />
           ))}

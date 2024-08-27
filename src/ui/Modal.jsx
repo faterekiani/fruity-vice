@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useClickOutside } from "../hook/useClickOutside";
 
-/* eslint-disable react/prop-types */
 const Modal = ({ isOpen, onClose, children }) => {
   const ref = useClickOutside(onClose);
+
   return (
     <div
       className={`fixed inset-0 w-full h-screen bg-black/20 z-50 overflow-y-auto px-4 md:px-8 transition-all ${

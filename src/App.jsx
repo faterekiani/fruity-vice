@@ -4,9 +4,7 @@ import AppLayout from "./ui/AppLayout";
 import Cart from "./features/cart/Cart";
 import Products, { loader as menuLoader } from "./features/product/Products";
 import Error from "./ui/Error";
-import FavoritesList, {
-  loader as favoriteLoader,
-} from "./features/favorites/FavoritesList";
+import FavoritesList from "./features/favorites/FavoritesList";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,7 +24,7 @@ function App() {
         {
           path: "favorites",
           element: <FavoritesList />,
-          loader: favoriteLoader,
+          // loader: favoriteLoader,
         },
       ],
     },

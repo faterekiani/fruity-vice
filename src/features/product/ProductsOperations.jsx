@@ -3,6 +3,7 @@ import Filter from "../../ui/Filter";
 import SortBy from "../../ui/SortBy";
 
 function ProductsOperations({ products }) {
+  // FILTER
   const filterOptions = products
     .map((fruit) => ({
       value: fruit.family,
@@ -20,6 +21,7 @@ function ProductsOperations({ products }) {
         options={[{ value: "all", label: "All" }, ...filterOptions]}
       />
 
+      {/* SORT */}
       <SortBy
         options={[
           { value: "name-asc", label: "sort by name (A-Z)" },

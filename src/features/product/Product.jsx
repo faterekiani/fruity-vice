@@ -1,18 +1,23 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
 import Modal from "../../ui/Modal.jsx";
 import DetailsModal from "./DetailsModal.jsx";
 
-import { useFavorites } from "../favorites/useFavorites.js";
 import { addItem } from "../cart/cartSlice.js";
-import useLoacalStorage from "../../hook/useLocalStorage.js";
+import {
+  addFavoriteList,
+  deleteFavoriteList,
+} from "../favorites/favoriteSlice.js";
 
 function Product({ fruit }) {
   const dispatch = useDispatch();
+
+  const { favoriteListItems } = useSelector((state) => state?.favoriteList);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const { id, name, family, nutritions } = fruit;
@@ -22,23 +27,31 @@ function Product({ fruit }) {
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const { setter } = useLoacalStorage();
+  const newItem = { id, name };
 
   // Product Add To Cart
   function handleAddToCart() {
-    const newItem = { id, name };
-    setter(newItem);
     dispatch(addItem(newItem));
   }
 
-  // favorite
-  const { addToFavorites, removeFromFavorites, isFavorited } = useFavorites();
+  // Product Add To Favorites
+  const handleAddToFavorites = () => {
+    dispatch(addFavoriteList(fruit));
+  };
+
+  function isFavorited(fruitId, fruitName) {
+    return favoriteListItems.some(
+      (item) => item.id === fruitId && item.name === fruitName
+    );
+  }
+
   const handleFavoriteToggle = () => {
     if (isFavorited(id, name)) {
-      removeFromFavorites(id);
+      dispatch(deleteFavoriteList(id));
       toast.success(`"${name}" removed from favorites!`);
     } else {
-      addToFavorites(fruit);
+      dispatch(addFavoriteList(newItem));
+
       toast.success(`"${name}" added to favorites`);
     }
   };
@@ -47,10 +60,13 @@ function Product({ fruit }) {
     <>
       <li className="product-item relative">
         <div className="absolute top-5 right-5 " onClick={handleFavoriteToggle}>
-          {isFavorited(id) ? (
-            <MdFavorite className="size-5" />
+          {isFavorited(id, name) ? (
+            <MdFavorite
+              className="size-5 cursor-pointer"
+              onClick={() => handleAddToFavorites()}
+            />
           ) : (
-            <MdFavoriteBorder className="size-5" />
+            <MdFavoriteBorder className="size-5 cursor-pointer" />
           )}
         </div>
 
